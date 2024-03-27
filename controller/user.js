@@ -1,5 +1,5 @@
 import { registerUser, loginUser, getUserProfile, editUserProfile  } from "../service/user.js";
-import { userRegisterSchema, userLoginSchema, updateProfileSchema } from "../Schema/user.js";
+import { userRegisterSchema, userLoginSchema, updateProfileSchema } from "../schema/user.js";
 
 export const register = async (req, res, next) => {
   try {
