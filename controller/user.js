@@ -1,4 +1,4 @@
-import { registerUser, loginUser, getUserProfile, editUserProfile  } from "../service/user.js";
+import { registerUser, loginUser, getUserProfile, editUserProfile, getUsers  } from "../service/user.js";
 import { userRegisterSchema, userLoginSchema, updateProfileSchema } from "../schema/user.js";
 
 export const register = async (req, res, next) => {
@@ -20,7 +20,7 @@ export const login = async (req, res, next) => {
     const { email, password } = req.body;
     const { error } = userLoginSchema.validate(req.body);
     if (error) {
-        return res.status(400).json({ error: error.details[0].message });
+        throw new Error(`400:${error.details[0].message}`)
     }
     const token = await loginUser({ email, password });
     res.status(200).json({ token });
@@ -28,6 +28,15 @@ export const login = async (req, res, next) => {
     next(err);
   }
 };
+
+export const getAllUsers = async (req, res, next) => {
+    try {
+      const users = await getUsers(req,res)
+      res.status(200).json(users);
+    } catch (err) {
+      next(err);
+    }
+  };
 
 export const getProfile = async (req, res, next) => {
   try {

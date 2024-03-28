@@ -15,15 +15,20 @@ export const registerUser = async ({ username, email, password }) => {
 export const loginUser = async ({ email, password }) => {
     const user = await User.findOne({ email });
     if (!user) {
-        throw new Error('Invalid credentials');
+        throw new Error('400:Invalid credentials');
     }
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-        throw new Error('Invalid credentials');
+        throw new Error('400:Invalid credentials');
     }
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
     return token;
 };
+
+export const getUsers = async (req, res) => {
+    const users = await User.find();
+    return users;
+  };
 
 export const getUserProfile = async (req,userId) => {
     const user = await User.findById(userId);
